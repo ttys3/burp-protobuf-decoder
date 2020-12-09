@@ -35,7 +35,7 @@ from java.lang import System
 from ui import ParameterProcessingRulesTable
 
 
-CONTENT_PROTOBUF = ('application/grpc-web+proto')
+CONTENT_PROTOBUF_TYPES = ['x-protobuf', 'application/x-protobuf', 'application/protobuf', 'application/grpc', 'application/grpc-web+proto' ]
 
 PROTO_FILENAME_EXTENSION_FILTER = FileNameExtensionFilter("*.proto, *.py",
                                                           ["proto", "py"])
@@ -213,8 +213,9 @@ class ProtobufEditorTab(IMessageEditorTab):
             name, _, value = header.partition(':')
             if name.lower() == 'content-type':
                 value = value.lower().strip()
-                if value in CONTENT_PROTOBUF:
-                    return True
+                for ct in CONTENT_PROTOBUF_TYPES:
+                    if ct in value:
+                        return True
         return False
 
     #whenever string is loaded to grpc-web-proto editor tab
